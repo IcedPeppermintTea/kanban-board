@@ -5,7 +5,7 @@ type TaskProp = {
     task: TaskData
 }
 
-// create the Task component
+// create the component Task
 function TaskCard({task}: TaskProp) {
     return (
         <div>

@@ -53,10 +53,36 @@ const initialData: BoardData = {
 
 // react app function
 function App() {
+
   const [board, setBoard] = useState<BoardData>(initialData)
 
+  // Add a new task to a column
+  function addTask(columnId: string, newTask: Task) {
+    // 1. copy the current columns to change the state
+    const updatedColumns: Column[] = board.columns.map(column => {
+      // 2. find the right column by using the columnId
+      if (column.id === columnId) {
+        // 3. add the task to that column's task set while keeping existing ones
+        const updatedTasks: Task[] = [...column.tasks, newTask]
+        // 4. update column to have the updated task set
+        const updatedColumn: Column = {...column, tasks:updatedTasks}
+        // 5. return the now changed column
+        return updatedColumn
+      }
+      // 6. if not the right column - return existing column with no changes
+      return column
+    })
+
+
+    // 7. copy the board with the updated column set
+    const updatedBoard: BoardData = {...board, columns: updatedColumns}
+
+    // 8. update the state
+    setBoard(updatedBoard)
+  }
+
   return (
-    <Board data={board}/>
+    <Board data={board} addTask={addTask}/>
   )
 }
 
