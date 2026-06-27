@@ -1,21 +1,20 @@
 import { type Column as ColumnData } from "../App"
+import TaskCard from "./TaskCard"
 
 // create the prop type
 type ColumnProp = {
-    data: ColumnData
+    column: ColumnData
 }
 
 // create the component Column
-function Column({data}: ColumnProp) {
+function Column({column}: ColumnProp) {
     return (
         <div>
-            <h2>{data.title}</h2>
+            <h2>{column.title}</h2>
             {/* map each of the tasks for the column */}
             <div>
-                {data.tasks.map(task => (
-                    <div key={task.id}>
-                        <p>{task.title}</p>
-                    </div>
+                {column.tasks.map(task => (
+                    <TaskCard key={task.id} task={task} />
                 ))}
             </div>
         </div>

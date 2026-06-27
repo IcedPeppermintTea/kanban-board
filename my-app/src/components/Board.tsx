@@ -14,7 +14,7 @@ function Board({data}: BoardProps) {
             <div className="board">
                 {/* map each of the columns*/}
                 {data.columns.map(column => (
-                    <Column key={column.id} data={column}/>
+                    <Column key={column.id} column={column}/>
                 ))}
             </div>
         </div>
