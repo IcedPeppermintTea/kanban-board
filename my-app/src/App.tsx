@@ -1,5 +1,6 @@
 import {useState} from "react"
 import Board from "./components/Board.tsx"
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd"
 
 // define the objects for the page
 export type Priority = "High" | "Medium" | "Low"
@@ -81,8 +82,91 @@ function App() {
     setBoard(updatedBoard)
   }
 
+  // persist changes after dragging a task
+  function onDragEnd(result: DropResult) {
+    // if dragged into non-droppable position - do nothing
+    if (!result.destination) {
+      return
+    }
+
+    const { source, destination } = result
+
+    // if dropped in the same spot - do nothing
+    if (source.droppableId === destination.droppableId
+      && source.index === destination.index) {
+        return
+    }
+    
+    // if dropped somewhere new within the same column, update task position
+    if (source.droppableId === destination.droppableId) {
+      // find the column of the moved task
+      const column = board.columns.find(col => col.id === source.droppableId)
+      if (!column) return
+
+      // copy the tasks
+      const newTasks: Task[] = [...column.tasks]
+
+      // remove moved task from its source position
+      const [movedTask] = newTasks.splice(source.index, 1)
+
+      // place it in its new position 
+      newTasks.splice(destination.index, 0, movedTask)
+
+      // if changed column - update task set, else display column as is
+      const updatedColumns: Column[] = board.columns.map(col => 
+        col.id === column.id ? {...col, tasks: newTasks} : col
+      )
+      
+      setBoard({...board, columns: updatedColumns})
+    }
+    // if dropped in a new column
+    else {
+      // find the source column of the moved task
+      const sourceColumn = board.columns.find(col => col.id === source.droppableId)
+      if (!sourceColumn) return
+
+      // find destination column of the moved task
+      const destColumn = board.columns.find(col => col.id === destination.droppableId)
+      if (!destColumn) return
+
+      // copy the tasks of the source column
+      const sourceTasks: Task[] = [...sourceColumn.tasks]
+
+      // copy the tasks of the destination column
+      const destTasks: Task[] = [...destColumn.tasks]
+      
+      // remove the moved task from source
+      const [movedTask] = sourceTasks.splice(source.index, 1)
+
+      // insert moved task to destination
+      destTasks.splice(destination.index, 0, movedTask)
+
+      // if changed column - update task set, else display column as is
+      const updatedColumns: Column[] = board.columns.map(col => {
+        if (col.id === sourceColumn.id) {
+          return {...col, tasks: sourceTasks}
+        }
+        if (col.id === destColumn.id) {
+          return {...col, tasks: destTasks}
+        }
+        return col
+      })
+      setBoard({...board, columns: updatedColumns})
+    }
+  
+
+
+    // get destination column id / index
+    // get moved task id
+    // place task in specific column through index/id
+
+  }
+  
   return (
-    <Board data={board} addTask={addTask}/>
+    <DragDropContext
+    onDragEnd={onDragEnd}>
+      <Board data={board} addTask={addTask}/> 
+    </DragDropContext>
   )
 }
 
