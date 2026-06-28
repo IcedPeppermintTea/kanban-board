@@ -19,20 +19,22 @@ function Column({column, addTask}: ColumnProp) {
     }
 
     return (
-        <div>
-            <h2>{column.title}</h2>
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-purple-700 mb-4">{column.title}</h2>
             {/* map each of the tasks for the column */}
-            <div>
+            <div className="flex flex-col gap-3">
                 {column.tasks.map(task => (
                     <TaskCard key={task.id} task={task} />
                 ))}
             </div>
-            <div>
+            <div className="mt-3">
                 {
                 // if true - show the AddTaskForm component*
                 showForm ? <AddTaskForm columnId={column.id} addTask={addTask} onClose={closeForm}/>
                 // else - show a button that when clicked - opens the form
-                :  <button onClick={() => setShowForm(true)}>+ Add Task</button>
+                :  <button 
+                onClick={() => setShowForm(true)}
+                className="w-full py-2 rounded-lg text-sm text-purple-400 border border-dashed border-purple-300 hover:bg-purple-100 transition-colors">+ Add Task</button>
                 }
             </div>
         </div>
