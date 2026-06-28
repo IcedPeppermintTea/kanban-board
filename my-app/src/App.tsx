@@ -74,12 +74,31 @@ function App() {
       return column
     })
 
-
     // 7. copy the board with the updated column set
     const updatedBoard: BoardData = {...board, columns: updatedColumns}
 
     // 8. update the state
     setBoard(updatedBoard)
+  }
+
+  // Delete an existing task
+  function deleteTask(columnId: string, deleteTaskid: string) {
+    // copy the columns
+    const updatedColumns: Column[] = board.columns.map(column => {
+      // if column of delete request - delete the task
+      if (column.id === columnId) {
+        // create new task set without the deleted task
+        const newTasks: Task[] = column.tasks.filter(task => task.id !== deleteTaskid)
+        // return the new set 
+        return {...column, tasks: newTasks}
+      }
+      // otherwise return the existing column
+      return column
+    })
+
+    // set the new columns
+    const updateBoard: BoardData = {...board, columns: updatedColumns}
+    setBoard(updateBoard)
   }
 
   // persist changes after dragging a task
@@ -153,19 +172,12 @@ function App() {
       })
       setBoard({...board, columns: updatedColumns})
     }
-  
-
-
-    // get destination column id / index
-    // get moved task id
-    // place task in specific column through index/id
-
   }
   
   return (
     <DragDropContext
     onDragEnd={onDragEnd}>
-      <Board data={board} addTask={addTask}/> 
+      <Board data={board} addTask={addTask} deleteTask={deleteTask}/> 
     </DragDropContext>
   )
 }

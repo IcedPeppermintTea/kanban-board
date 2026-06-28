@@ -8,10 +8,11 @@ import { Droppable } from "@hello-pangea/dnd"
 type ColumnProp = {
     column: ColumnData
     addTask: (columnId: string, newTask: Task) => void
+    deleteTask: (columnId: string, deleteTaskId: string) => void
 }
 
 // create the component Column
-function Column({column, addTask}: ColumnProp) {
+function Column({column, addTask, deleteTask}: ColumnProp) {
     // handle AddTaskForm state
     const [showForm, setShowForm] = useState<boolean>(false)
 
@@ -30,7 +31,7 @@ function Column({column, addTask}: ColumnProp) {
                     {/* map each of the tasks for the column */}
                     <div className="flex flex-col gap-3">
                         {column.tasks.map((task, index) => (
-                            <TaskCard key={task.id} task={task} index={index}/>
+                            <TaskCard key={task.id} task={task} index={index} deleteTask={deleteTask} columnId={column.id}/>
                         ))}
                         {provided.placeholder}
                     </div>
