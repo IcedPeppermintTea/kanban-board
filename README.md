@@ -2,9 +2,13 @@
 
 A drag-and-drop task management board built with React and TypeScript. Tasks can be created, moved between columns, and deleted.
 
+## Live Link
+
+[click here](https://icedpepperminttea.github.io/kanban-board/)
+
 ## Screenshots
 
-![Kanban Board](./assets/kanban_1.jpeg)
+![Kanban Board](src/assets/kanban_1.jpeg)
 
 ## Features
 

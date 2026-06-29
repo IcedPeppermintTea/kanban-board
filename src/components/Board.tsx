@@ -1,6 +1,5 @@
 import { type BoardData, type Task } from "../App"
 import Column from "./Column"
-import { Droppable } from "@hello-pangea/dnd"
 
 // create the type that describes what the component will receive
 type BoardProps = {
